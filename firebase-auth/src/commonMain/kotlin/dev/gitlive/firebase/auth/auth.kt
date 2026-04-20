@@ -74,6 +74,7 @@ public sealed class ActionCodeResult {
 public data class ActionCodeSettings(
     val url: String,
     val androidPackageName: AndroidPackageName? = null,
+    @Deprecated("dynamicLinkDomain removed in Firebase iOS SDK 12.0 and Android BOM 34.0.0.")
     val dynamicLinkDomain: String? = null,
     val canHandleCodeInApp: Boolean = false,
     val iOSBundleId: String? = null,
