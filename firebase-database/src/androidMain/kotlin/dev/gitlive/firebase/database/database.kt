@@ -109,6 +109,10 @@ public actual class FirebaseDatabase internal constructor(public val android: co
     public actual fun goOnline() {
         android.goOnline()
     }
+
+    public actual fun purgeOutstandingWrites() {
+        android.purgeOutstandingWrites()
+    }
 }
 
 internal actual open class NativeQuery(
@@ -204,17 +208,22 @@ public actual open class Query internal actual constructor(
 
     public actual suspend fun get(): DataSnapshot {
         val deferred = CompletableDeferred<DataSnapshot>()
-        android.get().addOnSuccessListener { snapshot ->
-            deferred.complete(DataSnapshot(snapshot, persistenceEnabled))
-        }.addOnFailureListener { exception ->
-            deferred.completeExceptionally(
-                if (exception is com.google.firebase.database.DatabaseException) {
-                    exception.wrap()
-                } else {
-                    exception
-                },
-            )
-        }
+        android.get()
+            .addOnSuccessListener { snapshot ->
+                deferred.complete(DataSnapshot(snapshot, persistenceEnabled))
+            }
+            .addOnFailureListener { exception ->
+                deferred.completeExceptionally(
+                    if (exception is com.google.firebase.database.DatabaseException) {
+                        exception.wrap()
+                    } else {
+                        exception
+                    },
+                )
+            }
+            .addOnCanceledListener {
+                deferred.cancel()
+            }
         return deferred.await()
     }
 
