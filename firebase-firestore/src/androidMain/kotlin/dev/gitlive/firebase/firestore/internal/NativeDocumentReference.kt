@@ -59,7 +59,7 @@ internal actual class NativeDocumentReference actual constructor(actual val nati
         exception?.let { close(exception) }
     }
 
-    override fun equals(other: Any?): Boolean = this === other || other is NativeDocumentReference && nativeValue == other.nativeValue
+    override fun equals(other: Any?): Boolean = this === other || (other is NativeDocumentReference && nativeValue == other.nativeValue)
     override fun hashCode(): Int = nativeValue.hashCode()
     override fun toString(): String = nativeValue.toString()
 

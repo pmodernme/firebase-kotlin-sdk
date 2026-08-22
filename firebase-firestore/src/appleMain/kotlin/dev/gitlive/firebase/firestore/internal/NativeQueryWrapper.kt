@@ -63,7 +63,9 @@ internal actual open class NativeQueryWrapper internal actual constructor(actual
 
     private fun Filter.toFIRFilter(): FIRFilter = when (this) {
         is Filter.And -> FIRFilter.andFilterWithFilters(filters.map { it.toFIRFilter() })
+
         is Filter.Or -> FIRFilter.orFilterWithFilters(filters.map { it.toFIRFilter() })
+
         is Filter.Field -> when (constraint) {
             is WhereConstraint.EqualTo -> FIRFilter.filterWhereField(field, isEqualTo = constraint.value ?: NSNull.`null`())
             is WhereConstraint.NotEqualTo -> FIRFilter.filterWhereField(field, isNotEqualTo = constraint.value ?: NSNull.`null`())
@@ -76,6 +78,7 @@ internal actual open class NativeQueryWrapper internal actual constructor(actual
             is WhereConstraint.InArray -> FIRFilter.filterWhereField(field, `in` = constraint.values)
             is WhereConstraint.NotInArray -> FIRFilter.filterWhereField(field, notIn = constraint.values)
         }
+
         is Filter.Path -> when (constraint) {
             is WhereConstraint.EqualTo -> FIRFilter.filterWhereFieldPath(path.ios, isEqualTo = constraint.value ?: NSNull.`null`())
             is WhereConstraint.NotEqualTo -> FIRFilter.filterWhereFieldPath(path.ios, isNotEqualTo = constraint.value ?: NSNull.`null`())

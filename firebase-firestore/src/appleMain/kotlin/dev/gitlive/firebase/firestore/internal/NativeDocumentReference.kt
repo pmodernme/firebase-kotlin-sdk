@@ -40,8 +40,11 @@ internal actual class NativeDocumentReference actual constructor(actual val nati
     actual suspend fun setEncoded(encodedData: EncodedObject, setOptions: SetOptions) = await {
         when (setOptions) {
             is SetOptions.Merge -> ios.setData(encodedData.ios, true, it)
+
             is SetOptions.Overwrite -> ios.setData(encodedData.ios, false, it)
+
             is SetOptions.MergeFields -> ios.setData(encodedData.ios, setOptions.fields, it)
+
             is SetOptions.MergeFieldPaths -> ios.setData(
                 encodedData.ios,
                 setOptions.encodedFieldPaths,
@@ -68,7 +71,7 @@ internal actual class NativeDocumentReference actual constructor(actual val nati
         awaitClose { listener.remove() }
     }
 
-    override fun equals(other: Any?): Boolean = this === other || other is NativeDocumentReference && nativeValue == other.nativeValue
+    override fun equals(other: Any?): Boolean = this === other || (other is NativeDocumentReference && nativeValue == other.nativeValue)
     override fun hashCode(): Int = nativeValue.hashCode()
     override fun toString(): String = nativeValue.toString()
 }
