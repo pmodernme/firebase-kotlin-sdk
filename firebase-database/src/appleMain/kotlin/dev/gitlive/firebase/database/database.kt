@@ -248,7 +248,6 @@ internal actual class NativeDatabaseReference internal constructor(
                     deferred.complete(null)
                 }
             },
-            withLocalEvents = false,
         )
         return deferred.await()
     }
@@ -287,6 +286,8 @@ public actual class MutableData internal constructor(
 
     public actual var value: Any?
         get() = ios.value?.takeIf { it !is NSNull }
+
+        @DelicateDatabaseApi
         set(value) {
             ios.value = value
         }
